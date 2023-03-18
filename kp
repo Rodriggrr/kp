@@ -13,8 +13,6 @@ if len(sys.argv) != 2:
 
 args = sys.argv[1]
 
-
-
 if args == '-h' or args == '--help':
     print(help_msg)
     sys.exit(0)
@@ -25,47 +23,47 @@ if not os.path.exists(args):
 
 # rodar arquivo .cpp
 if args.endswith(".cpp"):
-    print ("Compiling C++ file...")
+    print("Compiling C++ file...")
     time_to_compile = time.time()
-    os.system("g++ " + args + " -o " + args[:-4])
+    os.system(f"g++ \"{args}\" -o \"{args[:-4]}\"")
     time_to_compile = "{:.3f}".format(time.time() - time_to_compile)
-    print ("Compiled in " + termcolor.colored('[' +time_to_compile + ']', "green") + " seconds, running.\n")
+    print("Compiled in " + termcolor.colored('[' + time_to_compile + ']', "green") + " seconds, running.\n")
 
-    os.system("./" + args[:-4]) 
-    os.system("rm " + args[:-4])
+    os.system(f"./\"{args[:-4]}\"")
+    os.system(f"rm \"{args[:-4]}\"")
 
 
 # rodar arquivo .c
 elif args.endswith(".c"):
-    print ("Compiling C file...")
+    print("Compiling C file...")
     time_to_compile = time.time()
-    os.system("gcc " + args + " -o " + args[:-2])
+    os.system(f"gcc \"{args}\" -o \"{args[:-2]}\"")
     time_to_compile = "{:.3f}".format(time.time() - time_to_compile)
-    print ("Compiled in " + termcolor.colored('[' +time_to_compile + ']', "green") + " seconds, running.\n")
-    
-    os.system("./" + args[:-2])
-    os.system("rm " + args[:-2])
+    print("Compiled in " + termcolor.colored('[' + time_to_compile + ']', "green") + " seconds, running.\n")
+
+    os.system(f"./\"{args[:-2]}\"")
+    os.system(f"rm \"{args[:-2]}\"")
 
 # rodar arquivo .py
 elif args.endswith(".py"):
-    print ("Running Python file...")
-    os.system("python3 " + args)
+    print("Running Python file...")
+    os.system(f"python3 \"{args}\"")
 
 # rodar arquivo .java
 elif args.endswith(".java"):
-    print ("Compiling Java file...")
+    print("Compiling Java file...")
     time_to_compile = time.time()
-    os.system("javac " + args)
+    os.system(f"javac \"{args}\"")
     time_to_compile = "{:.3f}".format(time.time() - time_to_compile)
-    print ("Compiled in " + termcolor.colored('[' +time_to_compile + ']', "green") + " seconds, running.\n")
+    print("Compiled in " + termcolor.colored('[' + time_to_compile + ']', "green") + " seconds, running.\n")
 
-    os.system("java " + args[:-5])
-    os.system("rm " + args[:-5] + ".class")
+    os.system(f"java \"{args[:-5]}\"")
+    os.system(f"rm \"{args[:-5]}.class\"")
 
 # arquivo não suportado
 else:
-    print ("File type not supported.\n" + help_msg)
+    print("File type not supported.\n" + help_msg)
     sys.exit(1)
 
 
-print ("\nFinished in " + termcolor.colored('[' + "{:.3f}".format(time.time() - total_time) + ']', "green") + " seconds.")
+print("\nFinished in " + termcolor.colored('[' + "{:.3f}".format(time.time() - total_time) + ']', "green") + " seconds.")

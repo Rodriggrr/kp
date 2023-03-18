@@ -1,6 +1,5 @@
 #include <iostream>
 
-//Escrever o proprio nome
 using namespace std;
 int main()
 {
