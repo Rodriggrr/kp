@@ -15,6 +15,9 @@ cp $PROGRAM $INSTALL_DIR
 # Set the program file as executable
 chmod +x $INSTALL_DIR/$PROGRAM
 
+# Rename back for aesthetics
+mv kp kp.py
+
 # Check if the copy was successful
 if [ $? -eq 0 ]; then
     echo "Program $PROGRAM installed successfully in $INSTALL_DIR"
