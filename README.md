@@ -14,5 +14,4 @@ Run ```install.sh``` with
 
 ```sudo sh install.sh```
 
-###### Program uses Python3.
-###### Tested and used in Ubuntu 20.04 LTS
+###### Program uses Python3, tested and used in Ubuntu 20.04 LTS
