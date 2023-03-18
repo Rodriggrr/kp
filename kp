@@ -10,7 +10,7 @@ def unexpected_error(code):
     sys.exit(1)
 
 # mensagem de ajuda
-help_msg = "Usage: kp <file>\nSupported file types:\n.cpp, .c, .py, .java\n\n-h, --help: Show this message\n-s, --speed: Show the time that the program took to execute. (Not supported for Python files)"
+help_msg = "Usage: kp <arg> <file>\nSupported file types:\n.cpp, .c, .py, .java\n\n-h, --help: Show this message\n-s, --speed: Show the time that the program took to execute. (Not supported for Python files)"
 
 # variáveis
 total_time = time.time()
