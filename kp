@@ -4,30 +4,52 @@ import os
 import sys
 import termcolor
 
-help_msg = "Usage: kp <file>\nSupported file types:\n.cpp, .c, .py, .java\n\n-h, --help: Show this message\n"
+# função para erros inesperados
+def unexpected_error(code):
+    print(termcolor.colored(f"Program closed with code {code}.", "red"))
+    sys.exit(1)
 
+# mensagem de ajuda
+help_msg = "Usage: kp <file>\nSupported file types:\n.cpp, .c, .py, .java\n\n-h, --help: Show this message\n-s, --speed: Show the time that the program took to execute. (Not supported for Python files)"
+
+# variáveis
 total_time = time.time()
-if len(sys.argv) != 2:
+time_to_compile = time.time()
+speed = False
+
+# checar quantidade de argumentos de entrada
+if len(sys.argv) > 3:
     print(help_msg)
     sys.exit(1)
 
 args = sys.argv[1]
 
+# checar argumentos de entrada
 if args == '-h' or args == '--help':
     print(help_msg)
     sys.exit(0)
+elif (args == '-s' or args == '--speed') and not sys.argv[2].endswith(".py"):
+    args = sys.argv[2]
+    print(termcolor.colored("Total running time will be shown at the end of the execution.", "yellow"))
+    speed = True
+elif args == '-s' or args == '--speed':
+    print("Python files are not supported by this option.\n" + help_msg)
+    sys.exit(1)
 
+# checar se arquivo existe
 if not os.path.exists(args):
-    print("File " + termcolor.colored(args, "red") + " does not exist.\n" + help_msg)
+    print("File " + termcolor.colored(args, "red") + " does not exists.\n" + help_msg)
     sys.exit(1)
 
 # rodar arquivo .cpp
 if args.endswith(".cpp"):
     print("Compiling C++ file...")
-    time_to_compile = time.time()
-    os.system(f"g++ \"{args}\" -o \"{args[:-4]}\"")
-    time_to_compile = "{:.3f}".format(time.time() - time_to_compile)
-    print("Compiled in " + termcolor.colored('[' + time_to_compile + ']', "green") + " seconds, running.\n")
+    code = os.system(f"g++ \"{args}\" -o \"{args[:-4]}\"")
+    if code != 0:
+        unexpected_error(code)
+
+    time_to_compile = time.time() - time_to_compile
+    print("Compiled in " + termcolor.colored(f'[{float(time_to_compile):.3f}]', "green") + " seconds, running.\n")
 
     os.system(f"./\"{args[:-4]}\"")
     os.system(f"rm \"{args[:-4]}\"")
@@ -36,10 +58,12 @@ if args.endswith(".cpp"):
 # rodar arquivo .c
 elif args.endswith(".c"):
     print("Compiling C file...")
-    time_to_compile = time.time()
-    os.system(f"gcc \"{args}\" -o \"{args[:-2]}\"")
-    time_to_compile = "{:.3f}".format(time.time() - time_to_compile)
-    print("Compiled in " + termcolor.colored('[' + time_to_compile + ']', "green") + " seconds, running.\n")
+    code = os.system(f"gcc \"{args}\" -o \"{args[:-2]}\"")
+    if code != 0:
+        unexpected_error(code)
+
+    time_to_compile = time.time() - time_to_compile
+    print("Compiled in " + termcolor.colored(f'[{float(time_to_compile):.3f}]', "green") + " seconds, running.\n")
 
     os.system(f"./\"{args[:-2]}\"")
     os.system(f"rm \"{args[:-2]}\"")
@@ -47,15 +71,19 @@ elif args.endswith(".c"):
 # rodar arquivo .py
 elif args.endswith(".py"):
     print("Running Python file...")
-    os.system(f"python3 \"{args}\"")
+    code = os.system(f"python3 \"{args}\"")
+    if code != 0:
+        unexpected_error(code)
 
 # rodar arquivo .java
 elif args.endswith(".java"):
     print("Compiling Java file...")
-    time_to_compile = time.time()
-    os.system(f"javac \"{args}\"")
-    time_to_compile = "{:.3f}".format(time.time() - time_to_compile)
-    print("Compiled in " + termcolor.colored('[' + time_to_compile + ']', "green") + " seconds, running.\n")
+    code = os.system(f"javac \"{args}\"")
+    if code != 0:
+        unexpected_error(code)
+
+    time_to_compile = time.time() - time_to_compile
+    print("Compiled in " + termcolor.colored(f'[{float(time_to_compile):.3f}]', "green") + " seconds, running.\n")
 
     os.system(f"java \"{args[:-5]}\"")
     os.system(f"rm \"{args[:-5]}.class\"")
@@ -65,5 +93,10 @@ else:
     print("File type not supported.\n" + help_msg)
     sys.exit(1)
 
-
+# tempo total
 print("\nFinished in " + termcolor.colored('[' + "{:.3f}".format(time.time() - total_time) + ']', "green") + " seconds.")
+
+# tempo de execução
+if speed:
+    elapsed_time = time.time() - total_time - time_to_compile
+    print("Program executed in " + termcolor.colored(f'[{float(elapsed_time):.5f}]', "blue") + " seconds.")
