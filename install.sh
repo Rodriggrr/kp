@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Rename the file
+mv kp.py kp
+
 # Set the name of the program file
 PROGRAM=kp
 
