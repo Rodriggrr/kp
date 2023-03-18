@@ -14,7 +14,4 @@ Run ```install.sh``` with
 
 ```sudo sh install.sh```
 
-
-
-
-Program uses Python3.
+###### Program uses Python3.
