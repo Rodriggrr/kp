@@ -1,0 +1,65 @@
+#!/usr/bin/env python3.8
+import time
+import os
+import sys
+import termcolor
+
+help_msg = "Usage: kp <file>\nSupported file types:\n.cpp, .c, .py, .java\n\n-h, --help: Show this message\n"
+
+total_time = time.time()
+if len(sys.argv) != 2:
+    print(help_msg)
+    sys.exit(1)
+
+args = sys.argv[1]
+
+if args == '-h' or args == '--help':
+    print(help_msg)
+    sys.exit(0)
+
+# rodar arquivo .cpp
+if args.endswith(".cpp"):
+    print ("Compiling cpp file...")
+    time_to_compile = time.time()
+    os.system("g++ " + args + " -o " + args[:-4])
+    time_to_compile = "{:.3f}".format(time.time() - time_to_compile)
+    print ("Compiled in " + termcolor.colored('[' +time_to_compile + ']', "green") + " seconds, running.\n")
+
+    os.system("./" + args[:-4]) 
+    os.system("rm " + args[:-4])
+
+
+# rodar arquivo .c
+elif args.endswith(".c"):
+    print ("Compiling c file...")
+    time_to_compile = time.time()
+    os.system("gcc " + args + " -o " + args[:-2])
+    time_to_compile = "{:.3f}".format(time.time() - time_to_compile)
+    print ("Compiled in " + termcolor.colored('[' +time_to_compile + ']', "green") + " seconds, running.\n")
+    
+    os.system("./" + args[:-2])
+    os.system("rm " + args[:-2])
+
+# rodar arquivo .py
+elif args.endswith(".py"):
+    print ("Running python file...")
+    os.system("python3 " + args)
+
+# rodar arquivo .java
+elif args.endswith(".java"):
+    print ("Compiling java file...")
+    time_to_compile = time.time()
+    os.system("javac " + args)
+    time_to_compile = "{:.3f}".format(time.time() - time_to_compile)
+    print ("Compiled in " + termcolor.colored('[' +time_to_compile + ']', "green") + " seconds, running.\n")
+
+    os.system("java " + args[:-5])
+    os.system("rm " + args[:-5] + ".class")
+
+# arquivo não suportado
+else:
+    print ("File type not supported.\n" + help_msg)
+    sys.exit(1)
+
+
+print ("\nFinished in " + termcolor.colored('[' + "{:.3f}".format(time.time() - total_time) + ']', "green") + " seconds.")
