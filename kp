@@ -19,7 +19,7 @@ if args == '-h' or args == '--help':
 
 # rodar arquivo .cpp
 if args.endswith(".cpp"):
-    print ("Compiling cpp file...")
+    print ("Compiling C++ file...")
     time_to_compile = time.time()
     os.system("g++ " + args + " -o " + args[:-4])
     time_to_compile = "{:.3f}".format(time.time() - time_to_compile)
@@ -31,7 +31,7 @@ if args.endswith(".cpp"):
 
 # rodar arquivo .c
 elif args.endswith(".c"):
-    print ("Compiling c file...")
+    print ("Compiling C file...")
     time_to_compile = time.time()
     os.system("gcc " + args + " -o " + args[:-2])
     time_to_compile = "{:.3f}".format(time.time() - time_to_compile)
@@ -42,12 +42,12 @@ elif args.endswith(".c"):
 
 # rodar arquivo .py
 elif args.endswith(".py"):
-    print ("Running python file...")
+    print ("Running Python file...")
     os.system("python3 " + args)
 
 # rodar arquivo .java
 elif args.endswith(".java"):
-    print ("Compiling java file...")
+    print ("Compiling Java file...")
     time_to_compile = time.time()
     os.system("javac " + args)
     time_to_compile = "{:.3f}".format(time.time() - time_to_compile)
