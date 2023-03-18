@@ -13,9 +13,15 @@ if len(sys.argv) != 2:
 
 args = sys.argv[1]
 
+
+
 if args == '-h' or args == '--help':
     print(help_msg)
     sys.exit(0)
+
+if not os.path.exists(args):
+    print("File " + termcolor.colored(args, "red") + " does not exist.\n" + help_msg)
+    sys.exit(1)
 
 # rodar arquivo .cpp
 if args.endswith(".cpp"):
