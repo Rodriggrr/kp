@@ -4,23 +4,87 @@ import os
 import sys
 import termcolor
 
-# função para erros inesperados
-def unexpected_error(code):
-    print(termcolor.colored(f"Program closed with code {code}.", "red"))
-    sys.exit(1)
-
-# mensagem de ajuda
-help_msg = "Usage: kp <arg> <file>\nSupported file types:\n.cpp, .c, .py, .java\n\n-h, --help: Show this message\n-s, --speed: Show the time that the program took to execute. (Not supported for Python files)"
-
-# variáveis
+# variáveis globais
 total_time = time.time()
 time_to_compile = time.time()
 speed = False
 
-# checar quantidade de argumentos de entrada
-if len(sys.argv) > 3:
-    print(help_msg)
+# mensagem de ajuda
+help_msg = '''
+Usage: kp <option> <file>
+Example: kp -s main.cpp (runs main.cpp with speed option) | kp main.cpp (runs main.cpp)
+
+Options:
+    -h, --help      Show this help message.
+    -s, --speed     Show total running time of the program at its end. (Not supported for Python files)
+'''
+
+# --------------------------------- FUNÇÕES -----------------------------------
+# funções de erro
+def unexpected_error(code):
+    print(termcolor.colored(f"Program closed with code {code}.", "red"))
     sys.exit(1)
+
+def error_msg(msg):
+    print(termcolor.colored(msg + '\nAborting. Use -h or --help for help.', "red"))
+    sys.exit(1)
+
+# rodar arquivos .cpp
+def run_cpp(args):
+    print("Compiling C++ file...")
+    code = os.system(f"g++ \"{args}\" -o \"{args[:-4]}\"")
+    if code != 0:
+        unexpected_error(code)
+
+    global time_to_compile 
+    time_to_compile = time.time() - time_to_compile
+    print("Compiled in " + termcolor.colored(f'[{float(time_to_compile):.3f}]', "green") + " seconds, running.\n")
+
+    os.system(f"./\"{args[:-4]}\"")
+    os.system(f"rm \"{args[:-4]}\"")
+
+# rodar arquivos .c
+def run_c(args):
+    print("Compiling C file...")
+    code = os.system(f"gcc \"{args}\" -o \"{args[:-2]}\"")
+    if code != 0:
+        unexpected_error(code)
+
+    global time_to_compile
+    time_to_compile = time.time() - time_to_compile
+    print("Compiled in " + termcolor.colored(f'[{float(time_to_compile):.3f}]', "green") + " seconds, running.\n")
+
+    os.system(f"./\"{args[:-2]}\"")
+    os.system(f"rm \"{args[:-2]}\"")
+
+# rodar arquivos .java
+def run_java(args):
+    print("Compiling Java file...")
+    code = os.system(f"javac \"{args}\"")
+    if code != 0:
+        unexpected_error(code)
+
+    global time_to_compile
+    time_to_compile = time.time() - time_to_compile
+    print("Compiled in " + termcolor.colored(f'[{float(time_to_compile):.3f}]', "green") + " seconds, running.\n")
+
+    os.system(f"java \"{args[:-5]}\"")
+    os.system(f"rm \"{args[:-5]}.class\"")
+
+# rodar arquivos .py
+def run_py(args):
+    print("Running Python file...")
+    code = os.system(f"python3 \"{args}\"")
+    if code != 0:
+        unexpected_error(code)
+
+# --------------------------------- MAIN --------------------------------------
+
+# checar quantidade de argumentos de entrada
+if len(sys.argv) == 1:
+    error_msg("No arguments passed.")
+elif len(sys.argv) == 2 and (sys.argv[1].startswith('-s') or sys.argv[1].startswith('--speed')):
+    error_msg("No file supplied.")
 
 args = sys.argv[1]
 
@@ -30,68 +94,25 @@ if args == '-h' or args == '--help':
     sys.exit(0)
 elif (args == '-s' or args == '--speed') and not sys.argv[2].endswith(".py"):
     args = sys.argv[2]
-    print(termcolor.colored("Total running time will be shown at the end of the execution.", "yellow"))
     speed = True
 elif args == '-s' or args == '--speed':
-    print("Python files are not supported by this option.\n" + help_msg)
-    sys.exit(1)
+    error_msg("Python files are not supported for this option.")
 
 # checar se arquivo existe
 if not os.path.exists(args):
-    print("File " + termcolor.colored(args, "red") + " does not exists.\n" + help_msg)
-    sys.exit(1)
+    error_msg(f"File \"{args}\" does not exist.")
 
-# rodar arquivo .cpp
+# checar tipo de arquivo e executar
 if args.endswith(".cpp"):
-    print("Compiling C++ file...")
-    code = os.system(f"g++ \"{args}\" -o \"{args[:-4]}\"")
-    if code != 0:
-        unexpected_error(code)
-
-    time_to_compile = time.time() - time_to_compile
-    print("Compiled in " + termcolor.colored(f'[{float(time_to_compile):.3f}]', "green") + " seconds, running.\n")
-
-    os.system(f"./\"{args[:-4]}\"")
-    os.system(f"rm \"{args[:-4]}\"")
-
-
-# rodar arquivo .c
+    run_cpp(args)
 elif args.endswith(".c"):
-    print("Compiling C file...")
-    code = os.system(f"gcc \"{args}\" -o \"{args[:-2]}\"")
-    if code != 0:
-        unexpected_error(code)
-
-    time_to_compile = time.time() - time_to_compile
-    print("Compiled in " + termcolor.colored(f'[{float(time_to_compile):.3f}]', "green") + " seconds, running.\n")
-
-    os.system(f"./\"{args[:-2]}\"")
-    os.system(f"rm \"{args[:-2]}\"")
-
-# rodar arquivo .py
+    run_c(args)
 elif args.endswith(".py"):
-    print("Running Python file...")
-    code = os.system(f"python3 \"{args}\"")
-    if code != 0:
-        unexpected_error(code)
-
-# rodar arquivo .java
+    run_py(args)
 elif args.endswith(".java"):
-    print("Compiling Java file...")
-    code = os.system(f"javac \"{args}\"")
-    if code != 0:
-        unexpected_error(code)
-
-    time_to_compile = time.time() - time_to_compile
-    print("Compiled in " + termcolor.colored(f'[{float(time_to_compile):.3f}]', "green") + " seconds, running.\n")
-
-    os.system(f"java \"{args[:-5]}\"")
-    os.system(f"rm \"{args[:-5]}.class\"")
-
-# arquivo não suportado
+    run_java(args)
 else:
-    print("File type not supported.\n" + help_msg)
-    sys.exit(1)
+    error_msg("File type is not supported.")
 
 # tempo total
 print("\nFinished in " + termcolor.colored('[' + "{:.3f}".format(time.time() - total_time) + ']', "green") + " seconds.")

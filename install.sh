@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Install python3-pip
+sudo apt-get install python3-pip
+
+# Install the termcolor package
+pip install termcolor
+
 # Rename the file
 mv kp.py kp
 
