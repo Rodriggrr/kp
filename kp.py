@@ -13,6 +13,8 @@ speed = False
 help_msg = '''
 Usage: kp <option> <file>
 Example: kp -s main.cpp (runs main.cpp with speed option) | kp main.cpp (runs main.cpp)
+Supports: 
+    .c, .cpp, .py, .java, .ts
 
 Options:
     -h, --help      Show this help message.
@@ -78,6 +80,29 @@ def run_py(args):
     if code != 0:
         unexpected_error(code)
 
+#rodar arquivos .ts
+def run_ts(args):
+    print("Running TypeScript file...")
+
+    # check if tsc is installed, if not, install it.
+    if  os.system("tsc -v \"$@\" > /dev/null 2") != 0:
+        print(termcolor.colored("TypeScript is not installed ", "red") + "installing...")
+        os.system("npm install -g typescript")
+        print("TypeScript installed.")
+    
+    code = os.system(f"npx tsc \"{args}\"")
+    if code != 0:
+        unexpected_error(code)
+
+    global time_to_compile
+    time_to_compile = time.time() - time_to_compile
+    print("Compiled in " + termcolor.colored(f'[{float(time_to_compile):.3f}]', "green") + " seconds, running.\n")
+
+    os.system(f"node \"{args[:-3]}.js\"")
+    os.system(f"rm \"{args[:-3]}.js\"")
+
+
+
 # --------------------------------- MAIN --------------------------------------
 
 # checar quantidade de argumentos de entrada
@@ -111,6 +136,8 @@ elif args.endswith(".py"):
     run_py(args)
 elif args.endswith(".java"):
     run_java(args)
+elif args.endswith(".ts"):
+    run_ts(args)
 else:
     error_msg("File type is not supported.")
 
