@@ -22,6 +22,11 @@ Options:
 '''
 
 # --------------------------------- FUNÇÕES -----------------------------------
+def show_compiling_time():
+    global time_to_compile
+    time_to_compile = time.time() - time_to_compile
+    print("Compiled in " + termcolor.colored(f'[{float(time_to_compile):.3f}]', "green") + " seconds, running.\n")
+
 # funções de erro
 def unexpected_error(code):
     print(termcolor.colored(f"Program closed with code {code}.", "red"))
@@ -38,10 +43,8 @@ def run_cpp(args):
     if code != 0:
         unexpected_error(code)
 
-    global time_to_compile 
-    time_to_compile = time.time() - time_to_compile
-    print("Compiled in " + termcolor.colored(f'[{float(time_to_compile):.3f}]', "green") + " seconds, running.\n")
-
+    show_compiling_time()
+    
     os.system(f"./\"{args[:-4]}\"")
     os.system(f"rm \"{args[:-4]}\"")
 
@@ -52,10 +55,8 @@ def run_c(args):
     if code != 0:
         unexpected_error(code)
 
-    global time_to_compile
-    time_to_compile = time.time() - time_to_compile
-    print("Compiled in " + termcolor.colored(f'[{float(time_to_compile):.3f}]', "green") + " seconds, running.\n")
-
+    show_compiling_time()
+    
     os.system(f"./\"{args[:-2]}\"")
     os.system(f"rm \"{args[:-2]}\"")
 
@@ -66,9 +67,7 @@ def run_java(args):
     if code != 0:
         unexpected_error(code)
 
-    global time_to_compile
-    time_to_compile = time.time() - time_to_compile
-    print("Compiled in " + termcolor.colored(f'[{float(time_to_compile):.3f}]', "green") + " seconds, running.\n")
+    show_compiling_time()
 
     os.system(f"java \"{args[:-5]}\"")
     os.system(f"rm \"{args[:-5]}.class\"")
@@ -94,9 +93,7 @@ def run_ts(args):
     if code != 0:
         unexpected_error(code)
 
-    global time_to_compile
-    time_to_compile = time.time() - time_to_compile
-    print("Compiled in " + termcolor.colored(f'[{float(time_to_compile):.3f}]', "green") + " seconds, running.\n")
+    show_compiling_time()
 
     os.system(f"node \"{args[:-3]}.js\"")
     os.system(f"rm \"{args[:-3]}.js\"")
