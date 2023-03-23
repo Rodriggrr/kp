@@ -18,7 +18,7 @@ Supports:
 
 Options:
     -h, --help      Show this help message.
-    -s, --speed     Show total running time of the program at its end. (Not supported for Python files)
+    -s, --speed     Show total running time of the program at its end. (Not supported for non-compiled languages)
 '''
 
 # --------------------------------- FUNÇÕES -----------------------------------
@@ -98,6 +98,13 @@ def run_ts(args):
     os.system(f"node \"{args[:-3]}.js\"")
     os.system(f"rm \"{args[:-3]}.js\"")
 
+# rodar arquivos .js
+def run_js(args):
+    print("Running JavaScript file...")
+    code = os.system(f"node \"{args}\"")
+    if code != 0:
+        unexpected_error(code)
+
 
 
 # --------------------------------- MAIN --------------------------------------
@@ -135,6 +142,8 @@ elif args.endswith(".java"):
     run_java(args)
 elif args.endswith(".ts"):
     run_ts(args)
+elif args.endswith(".js"):
+    run_js(args)
 else:
     error_msg("File type is not supported.")
 
