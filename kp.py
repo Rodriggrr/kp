@@ -22,6 +22,7 @@ Options:
 '''
 
 # --------------------------------- FUNÇÕES -----------------------------------
+# função para mostrar tempo de compilação
 def show_compiling_time():
     global time_to_compile
     time_to_compile = time.time() - time_to_compile
