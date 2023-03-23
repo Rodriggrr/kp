@@ -122,11 +122,11 @@ args = sys.argv[1]
 if args == '-h' or args == '--help':
     print(help_msg)
     sys.exit(0)
-elif (args == '-s' or args == '--speed') and not sys.argv[2].endswith(".py"):
+elif (args == '-s' or args == '--speed'):
+    if sys.argv[2].endswith('.py') or sys.argv[2].endswith('.js'):
+        error_msg("Speed option is not supported for non-compiled languages.")
     args = sys.argv[2]
     speed = True
-elif args == '-s' or args == '--speed':
-    error_msg("Python files are not supported for this option.")
 
 # checar se arquivo existe
 if not os.path.exists(args):
