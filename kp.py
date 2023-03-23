@@ -14,7 +14,7 @@ help_msg = '''
 Usage: kp <option> <file>
 Example: kp -s main.cpp (runs main.cpp with speed option) | kp main.cpp (runs main.cpp)
 Supports: 
-    .c, .cpp, .py, .java, .ts
+    .c, .cpp, .py, .java, .ts, js
 
 Options:
     -h, --help      Show this help message.

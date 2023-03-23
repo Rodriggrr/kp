@@ -1,6 +1,6 @@
 ## Usage:
 
-Compiles and run C, C++, Java, TS and Python files.
+Compiles and run C, C++, Java, TS, JS and Python files.
 
 ```
 kp <file>
