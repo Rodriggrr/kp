@@ -18,9 +18,6 @@ INSTALL_DIR=/usr/bin
 # Copy the program file to the installation directory
 cp $PROGRAM $INSTALL_DIR
 
-# Set the program file as executable
-chmod +x $INSTALL_DIR/$PROGRAM
-
 # Rename back for aesthetics
 mv kp kp.py
 
