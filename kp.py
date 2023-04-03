@@ -1,77 +1,139 @@
 #!/usr/bin/env python3
-import time
 import os
 import sys
-import termcolor
+import time
+import argparse
+from termcolor import colored
 
-# variáveis globais
-total_time = time.time()
+# ------------------ VARIÁVEIS -------------------- #
+# tempo de compilação
 time_to_compile = time.time()
-speed = False
+total_time = time.time()
 
-# mensagem de ajuda
-help_msg = '''
-Usage: kp <option> <file>
-Example: kp -s main.cpp (runs main.cpp with speed option) | kp main.cpp (runs main.cpp)
-Supports: 
-    .c, .cpp, .py, .java, .ts, .js
-
-Options:
-    -h, --help      Show this help message.
-    -s, --speed     Show total running time of the program at its end. (Not supported for non-compiled languages)
-'''
-
-# --------------------------------- FUNÇÕES -----------------------------------
+# ------------------ FUNÇÕES VARIADAS ---------------------- #
 # função para mostrar tempo de compilação
-def show_compiling_time():
+def show_compiling_time(file, foo=""):
     global time_to_compile
     time_to_compile = time.time() - time_to_compile
-    print("Compiled in " + termcolor.colored(f'[{float(time_to_compile):.3f}]', "green") + " seconds, running.\n")
+    print(f"{file}: compiled in " + colored(f'[{float(time_to_compile):.3f}]', "green") + f" seconds.{foo}")
+    time_to_compile = time.time()
 
 # funções de erro
-def unexpected_error(code):
-    print(termcolor.colored(f"Program closed with code {code}.", "red"))
-    sys.exit(1)
+def unexpected_error(code, close=True):
+    print(colored(f"Program closed with code {code}.", "red"))
+    if close:
+        sys.exit(1)
 
-def error_msg(msg):
-    print(termcolor.colored(msg + '\nAborting. Use -h or --help for help.', "red"))
-    sys.exit(1)
+def error_msg(msg, close=True):
+    print(colored(msg, "red"))
+    if close:
+        print(colored('\nAborting. Use -h or --help for help.', "red"))
+        sys.exit(1)
 
-# rodar arquivos .cpp
-def run_cpp(args):
-    print("Compiling C++ file...")
-    code = os.system(f"g++ \"{args}\" -o \"{args[:-4]}\"")
-    if code != 0:
-        unexpected_error(code)
+# -------------------- COMPILAR ---------------------- #
+# compilar arquivos .cpp
+def compile_cpp(args, show=True) -> int:
+    hide = ""
+    if show:
+        print("Compiling C++ file...")
+    else:
+        hide = "> /dev/null 2>&1"
+    code = os.system(f"g++ \"{args}\" -o \"{args[:-4]}\" {hide}")
+    return code
 
-    show_compiling_time()
-    
-    os.system(f"./\"{args[:-4]}\"")
-    os.system(f"rm \"{args[:-4]}\"")
 
-# rodar arquivos .c
-def run_c(args):
-    print("Compiling C file...")
-    code = os.system(f"gcc \"{args}\" -o \"{args[:-2]}\"")
-    if code != 0:
-        unexpected_error(code)
+# compilar arquivos .c
+def compile_c(args, show=True) -> int:
+    hide = ""
+    if show:
+        print("Compiling C file...")
+    else:
+        hide = "> /dev/null 2>&1"
 
-    show_compiling_time()
-    
-    os.system(f"./\"{args[:-2]}\"")
-    os.system(f"rm \"{args[:-2]}\"")
+    code = os.system(f"gcc \"{args}\" -o \"{args[:-2]}\" {hide}")
+    return code
 
-# rodar arquivos .java
-def run_java(args):
-    print("Compiling Java file...")
-    code = os.system(f"javac \"{args}\"")
-    if code != 0:
-        unexpected_error(code)
 
-    show_compiling_time()
+# compilar arquivos .java
+def compile_java(args, show=True) -> int:
+    hide = ""
+    if show:
+        print("Compiling Java file...")
+    else:
+        hide = "> /dev/null 2>&1"
 
-    os.system(f"java \"{args[:-5]}\"")
-    os.system(f"rm \"{args[:-5]}.class\"")
+    code = os.system(f"javac \"{args}\" {hide}")
+    return code
+
+# compilar aquivos .ts
+
+
+
+# compilar varios arquivos
+def compile(args):
+    print("Compiling files...")
+    count = 0
+    show = True
+    if len(args) > 1:
+        show = False
+    for file in args:
+        code = 0
+        if file.endswith(".cpp"):
+            code = compile_cpp(file, show)
+        elif file.endswith(".c"):
+            code = compile_c(file, show)
+        elif file.endswith(".java"):
+            code = compile_java(file, show)
+        else:
+            error_msg(f"{file}: File type not supported.")
+            count += 1
+        
+        if code != 0:
+            error_msg(f"{file}: Compilation failed.", close=False)
+            count += 1
+        else:
+            show_compiling_time(file)
+
+    if count > 0 and not show:
+        error_msg(f"{count} files were not compiled.", close=False)
+
+
+# compilar e rodar arquivos
+def compile_and_run(args):
+    if args.file[0].endswith(".py"):
+        run_py(args.file[0])
+
+    elif args.file[0].endswith(".js"):
+        run(args.file[0], 3, ext=".js")
+
+    elif args.file[0].endswith(".ts"):
+        run(args.file[0], 3, ext=".js", run="node ")
+
+    elif args.file[0].endswith(".cpp"):
+        compile_cpp(args.file[0])
+        show_compiling_time(args.file[0], foo="\n")
+        run(args.file[0], 4)
+
+    elif args.file[0].endswith(".c"):
+        compile_c(args.file[0])
+        show_compiling_time(args.file[0], foo="\n")
+        run(args.file[0], 2)
+
+    elif args.file[0].endswith(".java"):
+        compile_java(args.file[0])
+        show_compiling_time(args.file[0], foo="\n")
+        run(args.file[0], 5, ext="", run="java ", remove=False)
+        os.system(f"rm \"{args.file[0][:-5]}.class\"")
+
+    else:
+        error_msg("File type not supported.")  
+
+
+# rodar arquivos
+def run(args, erase, ext="", run="./", remove=True):
+    os.system(f"{run}\"{args[:-erase]}\"{ext}")
+    if remove:
+        os.system(f"rm \"{args[:-erase]}\"{ext}")
 
 # rodar arquivos .py
 def run_py(args):
@@ -80,78 +142,39 @@ def run_py(args):
     if code != 0:
         unexpected_error(code)
 
-#rodar arquivos .ts
-def run_ts(args):
-    print("Running TypeScript file...")
 
-    # check if tsc is installed, if not, install it.
-    if  os.system("tsc -v \"$@\" > /dev/null 2") != 0:
-        print(termcolor.colored("TypeScript is not installed ", "red") + "installing...")
-        os.system("npm install -g typescript")
-        print("TypeScript installed.")
-    
-    code = os.system(f"npx tsc \"{args}\"")
-    if code != 0:
-        unexpected_error(code)
-
-    show_compiling_time()
-
-    os.system(f"node \"{args[:-3]}.js\"")
-    os.system(f"rm \"{args[:-3]}.js\"")
-
-# rodar arquivos .js
-def run_js(args):
-    print("Running JavaScript file...")
-    code = os.system(f"node \"{args}\"")
-    if code != 0:
-        unexpected_error(code)
+# ----------------- ARGPARSE ---------------------- #
+parser = argparse.ArgumentParser(description="Compile and run:\nC, C++, Java, Python, Javascript and Typescript files.")
+parser.add_argument("file", help="File to compile and run.", nargs="*")
+parser.add_argument("-c", "--compile", help="Compile multiple files.", action="store_true")
+parser.add_argument("-v", "--version", help="Show version.", action="store_true")
+parser.add_argument("-r", "--run", help="Run file.", action="store_true")
+args = parser.parse_args()
 
 
-
-# --------------------------------- MAIN --------------------------------------
-
-# checar quantidade de argumentos de entrada
-if len(sys.argv) == 1:
-    error_msg("No arguments passed.")
-elif len(sys.argv) == 2 and (sys.argv[1].startswith('-s') or sys.argv[1].startswith('--speed')):
-    error_msg("No file supplied.")
-
-args = sys.argv[1]
-
-# checar argumentos de entrada
-if args == '-h' or args == '--help':
-    print(help_msg)
+# ----------------- MAIN ---------------------- #
+if args.version:
+    print("Version 1.0.1")
     sys.exit(0)
-elif (args == '-s' or args == '--speed'):
-    if sys.argv[2].endswith('.py') or sys.argv[2].endswith('.js'):
-        error_msg("Speed option is not supported for non-compiled languages.")
-    args = sys.argv[2]
-    speed = True
 
-# checar se arquivo existe
-if not os.path.exists(args):
-    error_msg(f"File \"{args}\" does not exist.")
+# file not found
+try:
+    if not os.path.exists(args.file[0]):
+        error_msg(f"File \"{args.file[0]}\" does not exist.")
+except IndexError:
+    error_msg("No file specified.")
 
-# checar tipo de arquivo e executar
-if args.endswith(".cpp"):
-    run_cpp(args)
-elif args.endswith(".c"):
-    run_c(args)
-elif args.endswith(".py"):
-    run_py(args)
-elif args.endswith(".java"):
-    run_java(args)
-elif args.endswith(".ts"):
-    run_ts(args)
-elif args.endswith(".js"):
-    run_js(args)
+if args.run:
+    if len(args.file) == 1:
+        compile_and_run(args)
+    else:
+        error_msg("Only one file can be run.")
+
+elif args.compile:
+    compile(args.file)
+
 else:
-    error_msg("File type is not supported.")
+    compile_and_run(args)
 
-# tempo total
-print("\nFinished in " + termcolor.colored('[' + "{:.3f}".format(time.time() - total_time) + ']', "green") + " seconds.")
-
-# tempo de execução
-if speed:
-    elapsed_time = time.time() - total_time - time_to_compile
-    print("Program executed in " + termcolor.colored(f'[{float(elapsed_time):.5f}]', "blue") + " seconds.")
+# print program closed and time of execution.
+print("\nProgram closed in " + colored(f"[{float(time.time() - total_time):.3f}]", "green") + " seconds.")
