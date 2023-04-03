@@ -11,6 +11,7 @@ time_to_compile = time.time()
 total_time = time.time()
 
 # ------------------ FUNÇÕES VARIADAS ---------------------- #
+
 # função para mostrar tempo de compilação
 def show_compiling_time(file, foo=""):
     global time_to_compile
@@ -31,6 +32,7 @@ def error_msg(msg, close=True):
         sys.exit(1)
 
 # -------------------- COMPILAR ---------------------- #
+
 # compilar arquivos .cpp
 def compile_cpp(args, show=True) -> int:
     hide = ""
@@ -109,6 +111,8 @@ def compile(args):
     if count > 0 and not show:
         error_msg(f"{count} files were not compiled.", close=False)
 
+
+# ----------------- RODAR ---------------------- #
 
 # compilar e rodar arquivos
 def compile_and_run(args):
