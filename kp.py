@@ -66,12 +66,22 @@ def compile_java(args, show=True) -> int:
     return code
 
 # compilar aquivos .ts
+def compile_ts(args, show=True) -> int:
+    hide = ""
+    if show:
+        print("Compiling Typescript file...")
+    else:
+        hide = "> /dev/null 2>&1"
+
+    code = os.system(f"tsc \"{args}\" {hide}")
+    return code
 
 
 
 # compilar varios arquivos
 def compile(args):
-    print("Compiling files...")
+    if len(args) > 1:
+        print("Compiling files...")
     count = 0
     show = True
     if len(args) > 1:
@@ -84,6 +94,8 @@ def compile(args):
             code = compile_c(file, show)
         elif file.endswith(".java"):
             code = compile_java(file, show)
+        elif file.endswith(".ts"):
+            code = compile_ts(file, show)
         else:
             error_msg(f"{file}: File type not supported.")
             count += 1
@@ -104,9 +116,12 @@ def compile_and_run(args):
         run_py(args.file[0])
 
     elif args.file[0].endswith(".js"):
-        run(args.file[0], 3, ext=".js")
+        print("Running Javascript file...")
+        run(args.file[0], 3, ext=".js", run="node ", remove=False)
 
     elif args.file[0].endswith(".ts"):
+        compile_ts(args.file[0])
+        show_compiling_time(args.file[0], foo="\n")
         run(args.file[0], 3, ext=".js", run="node ")
 
     elif args.file[0].endswith(".cpp"):
@@ -148,7 +163,6 @@ parser = argparse.ArgumentParser(description="Compile and run:\nC, C++, Java, Py
 parser.add_argument("file", help="File to compile and run.", nargs="*")
 parser.add_argument("-c", "--compile", help="Compile multiple files.", action="store_true")
 parser.add_argument("-v", "--version", help="Show version.", action="store_true")
-parser.add_argument("-r", "--run", help="Run file.", action="store_true")
 args = parser.parse_args()
 
 
@@ -164,13 +178,7 @@ try:
 except IndexError:
     error_msg("No file specified.")
 
-if args.run:
-    if len(args.file) == 1:
-        compile_and_run(args)
-    else:
-        error_msg("Only one file can be run.")
-
-elif args.compile:
+if args.compile:
     compile(args.file)
 
 else:
