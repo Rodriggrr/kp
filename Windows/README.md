@@ -6,3 +6,5 @@ Press `win`, write `ambient variables`, probably a program named "Edit Ambient V
 Go to "Ambient Variables", double click "Path" tab >> "New" >> "Search" and go to the folder that kp is in.
 
 After that, press "Ok" like crazy, and you're done. Open a new cmd or powershell and write `kp -h`. If something shows up, it worked.
+
+NOT UPDATED WITH UBUNTU.
