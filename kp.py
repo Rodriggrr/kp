@@ -38,21 +38,23 @@ from termcolor import colored
 # tempo de compilação
 time_to_compile = time.time()
 total_time = time.time()
+error = False
 
 # ------------------ FUNÇÕES VARIADAS ---------------------- #
 
 # função para mostrar tempo de compilação
 def show_compiling_time(file, foo=""):
     global time_to_compile
-    time_to_compile = time.time() - time_to_compile
-    print(f"{file}: compiled in " + colored(f'[{float(time_to_compile):.3f}]', "green") + f" seconds.{foo}")
-    time_to_compile = time.time()
+    if not error:
+        time_to_compile = time.time() - time_to_compile
+        print(f"{file}: compiled in " + colored(f'[{float(time_to_compile):.3f}]', "green") + f" seconds.{foo}")
+        time_to_compile = time.time()
 
 # funções de erro
 def unexpected_error(code, close=True):
     print(colored(f"Program closed with code {code}.", "red"))
     if close:
-        sys.exit(1)
+        sys.exit(code)
 
 def error_msg(msg, close=True):
     print(colored(msg, "red"))
@@ -153,22 +155,30 @@ def compile_and_run(args):
         run(args.file[0], 3, ext=".js", run="node ", remove=False)
 
     elif args.file[0].endswith(".ts"):
-        compile_ts(args.file[0])
+        code = compile_ts(args.file[0])
+        if code != 0:
+            unexpected_error(code)
         show_compiling_time(args.file[0], foo="\n")
         run(args.file[0], 3, ext=".js", run="node ")
 
     elif args.file[0].endswith(".cpp"):
-        compile_cpp(args.file[0])
+        code = compile_cpp(args.file[0])
+        if code != 0:
+            unexpected_error(code)
         show_compiling_time(args.file[0], foo="\n")
         run(args.file[0], 4)
 
     elif args.file[0].endswith(".c"):
-        compile_c(args.file[0])
+        code = compile_c(args.file[0])
+        if code != 0:
+            unexpected_error(code)
         show_compiling_time(args.file[0], foo="\n")
         run(args.file[0], 2)
 
     elif args.file[0].endswith(".java"):
-        compile_java(args.file[0])
+        code = compile_java(args.file[0])
+        if code != 0:
+            unexpected_error(code)
         show_compiling_time(args.file[0], foo="\n")
         run(args.file[0], 5, ext="", run="java ", remove=False)
         os.system(f"rm \"{args.file[0][:-5]}.class\"")
@@ -179,15 +189,17 @@ def compile_and_run(args):
 
 # rodar arquivos
 def run(args, erase, ext="", run="./", remove=True):
-    os.system(f"{run}\"{args[:-erase]}\"{ext}")
+    code = os.system(f"{run}\"{args[:-erase]}\"{ext}")
     if remove:
         os.system(f"rm \"{args[:-erase]}\"{ext}")
+    if code != 0:
+        unexpected_error(code)
 
 # rodar arquivos .py
 def run_py(args):
     print("Running Python file...")
     code = os.system(f"python3 \"{args}\"")
-    if code != 0:
+    if code != 0 or error:
         unexpected_error(code)
 
 
