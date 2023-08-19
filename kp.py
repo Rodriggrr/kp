@@ -52,9 +52,10 @@ def show_compiling_time(file, foo=""):
 
 # funções de erro
 def unexpected_error(code, close=True):
-    print(colored(f"Program closed with code {code}.", "red"))
-    if close:
-        sys.exit(code)
+    if code != 0 and code != 2:
+        print(colored(f"Program closed with code {code}.", "red"))
+        if close:
+            sys.exit(code)
 
 def error_msg(msg, close=True):
     print(colored(msg, "red"))
