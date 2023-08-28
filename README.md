@@ -10,7 +10,7 @@ Use ```kp -h``` for help.
 
 ## Installation:
 
-Run `sh -c "$(https://raw.githubusercontent.com/Rodriggrr/kp/main/tools/install.sh)"`
+Run `sh -c "$(curl -fsSL https://raw.githubusercontent.com/Rodriggrr/kp/main/tools/install.sh)"`
 
 _OBS:_ install.sh will install python3-pip and termcolor, cause it is needed for the file.
 
