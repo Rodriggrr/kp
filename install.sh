@@ -6,23 +6,37 @@ sudo apt-get install python3-pip
 # Install the termcolor package
 pip install termcolor
 
+# download kp
+wget https://raw.githubusercontent.com/Rodriggrr/kp/main/kp.py
+
 # Rename the file
 mv kp.py kp
 
 # Set the name of the program file
 PROGRAM=kp
 
+# Make executable
+chmod +x kp
+
 # Set the installation directory
-INSTALL_DIR=/usr/bin
+INSTALL_DIR=~/.local/bin
 
-# Copy the program file to the installation directory
-cp $PROGRAM $INSTALL_DIR
 
-# Rename back for aesthetics
-mv kp kp.py
+# Check for PATH
+amarelo='\033[0;33m'
+vermelho='\033[0;31m'
+reset='\033[0m'
 
-# Make it executable (reason for root)
-chmod +x $INSTALL_DIR/kp
+status=$(echo $PATH | grep -o '/.local/bin' | wc -l)
+
+if [ $status = "0" ]; then
+	echo "${vermelho} ATENÇÃO: Considere adicionar ${INSTALL_DIR} à variável PATH, caso contrário o programa não irá funcionar.${reset}"
+fi 
+
+
+
+# move the program file to the installation directory
+mv $PROGRAM $INSTALL_DIR
 
 # Check if the copy was successful
 if [ $? -eq 0 ]; then
