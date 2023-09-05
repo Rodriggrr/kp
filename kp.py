@@ -123,7 +123,7 @@ def compile(args):
     for file in args:
         code = 0
         if file.endswith(".cpp"):
-            code = compile_cpp(file, show)
+            code = compile_cpp(file, '', show)
         elif file.endswith(".c"):
             code = compile_c(file, show)
         elif file.endswith(".java"):
