@@ -66,13 +66,13 @@ def error_msg(msg, close=True):
 # -------------------- COMPILAR ---------------------- #
 
 # compilar arquivos .cpp
-def compile_cpp(args, show=True) -> int:
+def compile_cpp(args, opt='', show=True) -> int:
     hide = ""
     if show:
         print("Compiling C++ file...")
     else:
         hide = "> /dev/null 2>&1"
-    code = os.system(f"g++ \"{args}\" -o \"{args[:-4]}\" {hide}")
+    code = os.system(f"g++ {opt + ' ' if opt else ''}\"{args}\" -o \"{args[:-4]}\" {hide}")
     return code
 
 
@@ -147,7 +147,7 @@ def compile(args):
 # ----------------- RODAR ---------------------- #
 
 # compilar e rodar arquivos
-def compile_and_run(args):
+def compile_and_run(args, opt=''):
     if args.file[0].endswith(".py"):
         run_py(args.file[0])
 
@@ -163,7 +163,7 @@ def compile_and_run(args):
         run(args.file[0], 3, ext=".js", run="node ")
 
     elif args.file[0].endswith(".cpp"):
-        code = compile_cpp(args.file[0])
+        code = compile_cpp(args.file[0], opt=opt)
         if code != 0:
             unexpected_error(code)
         show_compiling_time(args.file[0], foo="\n")
@@ -209,6 +209,7 @@ parser = argparse.ArgumentParser(description="Compile and run:\nC, C++, Java, Py
 parser.add_argument("file", help="File to compile and run.", nargs="*")
 parser.add_argument("-c", "--compile", help="Compile multiple files.", action="store_true")
 parser.add_argument("-v", "--version", help="Show version.", action="store_true")
+parser.add_argument("-a", "--args", help="Pass arguments to the program.", action="append", type=str)
 args = parser.parse_args()
 
 
@@ -228,7 +229,7 @@ if args.compile:
     compile(args.file)
 
 else:
-    compile_and_run(args)
-
+    
+    compile_and_run(args, opt=args.args[0] if args.args else '')
 # print program closed and time of execution.
 print("\nProgram closed in " + colored(f"[{float(time.time() - total_time):.3f}]", "green") + " seconds.")
