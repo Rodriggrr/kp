@@ -215,7 +215,7 @@ args = parser.parse_args()
 
 
 # ----------------- MAIN ---------------------- #
-version = open("version.txt", "r").read()
+version = "0.0.4"
 versionInt = int(version.replace(".", ""))
 
 if args.version:
@@ -233,7 +233,9 @@ if args.update:
         print("kp will be updated.")
         os.system("sh -c \"$(curl -fsSL https://raw.githubusercontent.com/Rodriggrr/kp/main/tools/install.sh)\"")
         print("kp updated.")
-        sys.exit(0)
+    
+    sys.exit(0)
+    
 
 
 # file not found
