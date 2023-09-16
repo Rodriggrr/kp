@@ -32,6 +32,7 @@ import os
 import sys
 import time
 import argparse
+import subprocess
 from termcolor import colored
 
 # ------------------ VARIÁVEIS -------------------- #
@@ -207,15 +208,23 @@ def run_py(args):
 parser = argparse.ArgumentParser(description="Compile and run:\nC, C++, Java, Python, Javascript and Typescript files.")
 parser.add_argument("file", help="File to compile and run.", nargs="*")
 parser.add_argument("-c", "--compile", help="Compile multiple files.", action="store_true")
+parser.add_argument("-u", "--update", help="Update kp.", action="store_true")
 parser.add_argument("-v", "--version", help="Show version.", action="store_true")
 parser.add_argument("-a", "--args", help="Pass arguments to the program.", action="append", type=str)
 args = parser.parse_args()
 
 
 # ----------------- MAIN ---------------------- #
+version = "Version 0.5.6"
+versionUname = version.split(" ")[1]
+
 if args.version:
-    print("Version 1.0.1")
+    print("Version 0.5.6")
     sys.exit(0)
+
+if args.update:
+    print("Updating kp...")
+    os.system(f"echo Current version: {versionUname}")
 
 # file not found
 try:
