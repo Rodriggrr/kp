@@ -215,16 +215,26 @@ args = parser.parse_args()
 
 
 # ----------------- MAIN ---------------------- #
-version = "Version 0.5.6"
-versionUname = version.split(" ")[1]
+version = open("version.txt", "r").read()
+versionInt = int(version.replace(".", ""))
 
 if args.version:
-    print("Version 0.5.6")
+    print(f"Version {version}")
     sys.exit(0)
 
 if args.update:
     print("Updating kp...")
-    os.system(f"echo Current version: {versionUname}")
+    os.system(f"echo Your version: {version}")
+    newVersion = subprocess.check_output("curl -SsL https://raw.githubusercontent.com/rodriggrr/kp/main/version.txt", shell=True, text=True)
+    print(f"Current version: {newVersion}")
+    newVersionInt = int(newVersion.replace(".", ""))
+
+    if newVersionInt > versionInt:
+        print("kp will be updated.")
+        os.system("sh -c \"$(curl -fsSL https://raw.githubusercontent.com/Rodriggrr/kp/main/tools/install.sh)\"")
+        print("kp updated.")
+        sys.exit(0)
+
 
 # file not found
 try:
