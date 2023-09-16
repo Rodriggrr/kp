@@ -43,6 +43,17 @@ error = False
 
 # ------------------ FUNÇÕES VARIADAS ---------------------- #
 
+version = "0.0.5"
+versionInt = int(version.replace(".", ""))
+
+def check_new_version():
+    newVersion = subprocess.check_output("curl -SsL https://raw.githubusercontent.com/Rodriggrr/kp/main/version.txt", shell=True, text=True)
+    print(f"Current version: {newVersion}")
+    newVersionInt = int(newVersion.replace(".", ""))
+
+    if newVersionInt > versionInt:
+        print(colored("kp tem uma nova atualização, use kp -u para atualizar.", "yellow"))
+
 # função para mostrar tempo de compilação
 def show_compiling_time(file, foo=""):
     global time_to_compile
@@ -215,8 +226,8 @@ args = parser.parse_args()
 
 
 # ----------------- MAIN ---------------------- #
-version = "0.0.4"
-versionInt = int(version.replace(".", ""))
+
+check_new_version()
 
 if args.version:
     print(f"Version {version}")
@@ -225,7 +236,7 @@ if args.version:
 if args.update:
     print("Updating kp...")
     os.system(f"echo Your version: {version}")
-    newVersion = subprocess.check_output("curl -SsL https://raw.githubusercontent.com/rodriggrr/kp/main/version.txt", shell=True, text=True)
+    newVersion = subprocess.check_output("curl -SsL https://raw.githubusercontent.com/Rodriggrr/kp/main/version.txt", shell=True, text=True)
     print(f"Current version: {newVersion}")
     newVersionInt = int(newVersion.replace(".", ""))
 
