@@ -2,8 +2,14 @@
 
 Compiles and run C, C++, Java, TS, JS and Python files.
 
-```
-kp <file>
+```bash
+kp [OPTION] <file>
+
+Options:
+
+-a="args"  - args to the compiler
+-c <files> = compile multiple files
+
 ```
 
 Use ```kp -h``` for help.

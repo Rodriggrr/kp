@@ -133,7 +133,6 @@ def compile(args):
         else:
             error_msg(f"{file}: File type not supported.")
             count += 1
-        
         if code != 0:
             error_msg(f"{file}: Compilation failed.", close=False)
             count += 1
@@ -185,7 +184,7 @@ def compile_and_run(args, opt=''):
         os.system(f"rm \"{args.file[0][:-5]}.class\"")
 
     else:
-        error_msg("File type not supported.")  
+        error_msg("File type not supported.")
 
 
 # rodar arquivos
@@ -229,7 +228,6 @@ if args.compile:
     compile(args.file)
 
 else:
-    
     compile_and_run(args, opt=args.args[0] if args.args else '')
 # print program closed and time of execution.
 print("\nProgram closed in " + colored(f"[{float(time.time() - total_time):.3f}]", "green") + " seconds.")
