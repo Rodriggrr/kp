@@ -43,12 +43,11 @@ error = False
 
 # ------------------ FUNÇÕES VARIADAS ---------------------- #
 
-version = "0.0.5"
+version = "0.0.6"
 versionInt = int(version.replace(".", ""))
 
 def check_new_version():
     newVersion = subprocess.check_output("curl -SsL https://raw.githubusercontent.com/Rodriggrr/kp/main/version.txt", shell=True, text=True)
-    print(f"Current version: {newVersion}")
     newVersionInt = int(newVersion.replace(".", ""))
 
     if newVersionInt > versionInt:
