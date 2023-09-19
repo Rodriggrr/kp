@@ -43,7 +43,7 @@ error = False
 
 # ------------------ FUNÇÕES VARIADAS ---------------------- #
 
-version = "0.0.6"
+version = "0.0.7"
 versionInt = int(version.replace(".", ""))
 
 def check_new_version():
@@ -57,8 +57,8 @@ def check_new_version():
 def show_compiling_time(file, foo=""):
     global time_to_compile
     if not error:
-        time_to_compile = time.time() - time_to_compile
-        print(f"{file}: compiled in " + colored(f'[{float(time_to_compile):.3f}]', "green") + f" seconds.{foo}")
+        compile_time = time.time() - time_to_compile
+        print(f"{file}: compiled in " + colored(f'[{float(compile_time):.3f}]', "green") + f" seconds.{foo}")
         time_to_compile = time.time()
 
 # funções de erro
@@ -219,8 +219,9 @@ parser = argparse.ArgumentParser(description="Compile and run:\nC, C++, Java, Py
 parser.add_argument("file", help="File to compile and run.", nargs="*")
 parser.add_argument("-c", "--compile", help="Compile multiple files.", action="store_true")
 parser.add_argument("-u", "--update", help="Update kp.", action="store_true")
-parser.add_argument("-v", "--version", help="Show version.", action="store_true")
 parser.add_argument("-a", "--args", help="Pass arguments to the program.", action="append", type=str)
+parser.add_argument("-e", "--execution-time", help="Show program total execution time.", action="store_true")
+parser.add_argument("-v", "--version", help="Show version.", action="store_true")
 args = parser.parse_args()
 
 
@@ -261,4 +262,9 @@ if args.compile:
 else:
     compile_and_run(args, opt=args.args[0] if args.args else '')
 # print program closed and time of execution.
-print("\nProgram closed in " + colored(f"[{float(time.time() - total_time):.3f}]", "green") + " seconds.")
+endTime = float(time.time() - total_time)
+print("\nProgram closed in " + colored(f"[{endTime:.3f}]", "green") + " seconds.")
+
+startTime = float(time.time() - time_to_compile)
+if args.execution_time:
+    print("Total execution time: " + colored(f"[{(startTime):.3f}]", "blue") + " seconds.")
