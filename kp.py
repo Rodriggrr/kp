@@ -40,11 +40,11 @@ from termcolor import colored
 time_to_compile = time.time()
 total_time = time.time()
 error = False
+version = "0.0.8"
+versionInt = int(version.replace(".", ""))
 
 # ------------------ FUNÇÕES VARIADAS ---------------------- #
 
-version = "0.0.7"
-versionInt = int(version.replace(".", ""))
 
 def check_new_version():
     newVersion = subprocess.check_output("curl -SsL https://raw.githubusercontent.com/Rodriggrr/kp/main/version.txt", shell=True, text=True)
@@ -267,4 +267,4 @@ print("\nProgram closed in " + colored(f"[{endTime:.3f}]", "green") + " seconds.
 
 startTime = float(time.time() - time_to_compile)
 if args.execution_time:
-    print("Total execution time: " + colored(f"[{(startTime):.3f}]", "blue") + " seconds.")
+    print("Total execution time: " + colored(f"[{(startTime):.5f}]", "blue") + " seconds.")
