@@ -33,14 +33,16 @@ import sys
 import time
 import argparse
 import subprocess
+import threading
 from termcolor import colored
 
 # ------------------ VARIÁVEIS -------------------- #
 # tempo de compilação
+update = False
 time_to_compile = time.time()
 total_time = time.time()
 error = False
-version = "0.0.8"
+version = "0.0.9"
 versionInt = int(version.replace(".", ""))
 
 # ------------------ FUNÇÕES VARIADAS ---------------------- #
@@ -51,7 +53,7 @@ def check_new_version():
     newVersionInt = int(newVersion.replace(".", ""))
 
     if newVersionInt > versionInt:
-        print(colored("kp tem uma nova atualização, use kp -u para atualizar.", "yellow"))
+        update = True
 
 # função para mostrar tempo de compilação
 def show_compiling_time(file, foo=""):
@@ -227,7 +229,8 @@ args = parser.parse_args()
 
 # ----------------- MAIN ---------------------- #
 
-check_new_version()
+thread = threading.Thread(target=check_new_version)
+thread.start()
 
 if args.version:
     print(f"Version {version}")
@@ -268,3 +271,6 @@ print("\nProgram closed in " + colored(f"[{endTime:.3f}]", "green") + " seconds.
 startTime = float(time.time() - time_to_compile)
 if args.execution_time:
     print("Total execution time: " + colored(f"[{(startTime):.5f}]", "blue") + " seconds.")
+
+if update:
+    print(colored("kp tem uma nova atualização, use kp -u para atualizar.", "yellow"))
