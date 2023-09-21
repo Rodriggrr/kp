@@ -8,7 +8,7 @@ pip install termcolor
 
 
 # Set the installation directory
-INSTALL_DIR=~/.local/bin
+INSTALL_DIR="~/.local/bin"
 
 # download kp
 wget https://raw.githubusercontent.com/Rodriggrr/kp/main/kp.py > /dev/null 2>&1
