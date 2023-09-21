@@ -42,7 +42,7 @@ update = False
 time_to_compile = time.time()
 total_time = time.time()
 error = False
-version = "0.0.9"
+version = "0.1.0"
 versionInt = int(version.replace(".", ""))
 
 # ------------------ FUNÇÕES VARIADAS ---------------------- #
@@ -161,6 +161,7 @@ def compile(args):
 # compilar e rodar arquivos
 def compile_and_run(args, opt=''):
     if args.file[0].endswith(".py"):
+        time_to_compile = time.time()
         run_py(args.file[0])
 
     elif args.file[0].endswith(".js"):
