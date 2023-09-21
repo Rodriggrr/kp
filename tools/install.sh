@@ -31,6 +31,7 @@ if [ $status = "0" ]; then
         echo "export PATH=$PATH:$INSTALL_DIR" >> ~/.bashrc
         echo "export PATH=$PATH:$INSTALL_DIR" >> ~/.zshrc
         export PATH=$PATH:$INSTALL_DIR
+    fi
 fi 
 
 # Check if the copy was successful
