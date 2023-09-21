@@ -11,11 +11,9 @@ pip install termcolor
 INSTALL_DIR="~/.local/bin"
 
 # download kp
-wget https://raw.githubusercontent.com/Rodriggrr/kp/main/kp.py > /dev/null 2>&1
+curl-fsSL https://raw.githubusercontent.com/Rodriggrr/kp/main/kp.py > $INSTALL_DIR/kp
 
 # Mv the file
-mv kp.py $INSTALL_DIR/
-mv $INSTALL_DIR/kp.py $INSTALL_DIR/kp
 chmod +x $INSTALL_DIR/kp
 
 # Check for PATH
