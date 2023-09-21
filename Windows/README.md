@@ -1,4 +1,5 @@
 # How to install
+
 After downloading the program "kp.exe", save it somewhere safe, as we will use it as an ambient variable. 
 
 Press `win`, write `ambient variables`, probably a program named "Edit Ambient Variables" will show up, press `Enter`.
