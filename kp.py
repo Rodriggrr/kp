@@ -160,7 +160,6 @@ def compile(args):
 
 # compilar e rodar arquivos
 def compile_and_run(args, opt=''):
-    global time_to_compile
     if args.file[0].endswith(".py"):
         time_to_compile = time.time()
         run_py(args.file[0])
