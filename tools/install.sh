@@ -14,7 +14,7 @@ INSTALL_DIR=~/.local/bin
 wget https://raw.githubusercontent.com/Rodriggrr/kp/main/kp.py > /dev/null 2>&1
 
 # Mv the file
-mv kp.py $INSTALL_DIR
+mv kp.py $INSTALL_DIR/
 mv $INSTALL_DIR/kp.py $INSTALL_DIR/kp
 chmod +x $INSTALL_DIR/kp
 
