@@ -24,7 +24,13 @@ reset='\033[0m'
 status=$(echo $PATH | grep -o '/.local/bin' | wc -l)
 
 if [ $status = "0" ]; then
-	echo "${vermelho} ATENÇÃO: Considere adicionar ${INSTALL_DIR} à variável PATH, caso contrário o programa não irá funcionar.${reset}"
+	echo "${vermelho} ATENÇÃO: ${INSTALL_DIR} não existe na varíavel PATH. Deseja adicionar? (caso escolha não, o programa não irá funcionar) [Y/n]${reset}"
+    read -r answer
+
+    if [ answer = "Y" ] || [ answer = "y" ]; then
+        echo "export PATH=$PATH:$INSTALL_DIR" >> ~/.bashrc
+        echo "export PATH=$PATH:$INSTALL_DIR" >> ~/.zshrc
+        export PATH=$PATH:$INSTALL_DIR
 fi 
 
 # Check if the copy was successful
