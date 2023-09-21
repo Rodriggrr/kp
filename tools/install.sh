@@ -6,21 +6,17 @@ sudo apt-get install python3-pip
 # Install the termcolor package
 pip install termcolor
 
-# download kp
-wget https://raw.githubusercontent.com/Rodriggrr/kp/main/kp.py
-
-# Rename the file
-mv kp.py kp
-
-# Set the name of the program file
-PROGRAM=kp
-
-# Make executable
-chmod +x kp
 
 # Set the installation directory
 INSTALL_DIR=~/.local/bin
 
+# download kp
+wget https://raw.githubusercontent.com/Rodriggrr/kp/main/kp.py > /dev/null 2>&1
+
+# Mv the file
+mv kp.py $INSTALL_DIR
+mv $INSTALL_DIR/kp.py $INSTALL_DIR/kp
+chmod +x $INSTALL_DIR/kp
 
 # Check for PATH
 amarelo='\033[0;33m'
