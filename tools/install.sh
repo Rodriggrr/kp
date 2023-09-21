@@ -8,7 +8,7 @@ pip install termcolor
 
 
 # Set the installation directory
-INSTALL_DIR="~/.local/bin"
+INSTALL_DIR=~/.local/bin
 
 # download kp
 curl -fsSL https://raw.githubusercontent.com/Rodriggrr/kp/main/kp.py > $INSTALL_DIR/kp
@@ -26,11 +26,6 @@ status=$(echo $PATH | grep -o '/.local/bin' | wc -l)
 if [ $status = "0" ]; then
 	echo "${vermelho} ATENÇÃO: Considere adicionar ${INSTALL_DIR} à variável PATH, caso contrário o programa não irá funcionar.${reset}"
 fi 
-
-
-
-# move the program file to the installation directory
-mv $PROGRAM $INSTALL_DIR
 
 # Check if the copy was successful
 if [ $? -eq 0 ]; then
