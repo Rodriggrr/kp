@@ -43,7 +43,7 @@ update = False
 time_to_compile = time.time()
 total_time = time.time()
 error = False
-version = "0.1.4"
+version = "0.1.7"
 versionInt = int(version.replace(".", ""))
 
 # ------------------ FUNÇÕES VARIADAS ---------------------- #
@@ -51,7 +51,6 @@ versionInt = int(version.replace(".", ""))
 
 def check_new_version():
     try:
-        print("Checking for new version...")
         newVersion = subprocess.check_output("timeout 0.2 curl -SsLp https://raw.githubusercontent.com/Rodriggrr/kp/main/version.txt", shell=True, text=True)
         newVersionInt = int(newVersion.replace(".", ""))
 
@@ -278,8 +277,8 @@ print("\nProgram closed in " + colored(f"[{endTime:.3f}]", "green") + " seconds.
 startTime = float(time.time() - time_to_compile)
 if args.execution_time:
     print("Total execution time: " + colored(f"[{(startTime):.5f}]", "blue") + " seconds.")
-    
+
 if update:
     print(colored("kp tem uma nova atualização, use kp -u para atualizar.", "yellow"))
-    
-sys.exit(0)
+
+thread.join()

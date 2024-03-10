@@ -5,6 +5,8 @@ vermelho='\033[0;31m'
 verde='\033[0;32m'
 reset='\033[0m'
 
+sudo -v
+
 echo "Checking and installing the necessary dependencies..."
 
 # Install python3-pip
@@ -27,6 +29,13 @@ if [ ! -d $INSTALL_DIR ]; then
     mkdir -p $(eval echo $INSTALL_DIR)
 fi
 echo "OK"
+
+#remove kp if already exists
+if [ -f $INSTALL_DIR/kp ]; then
+    echo -n "Removing previous version... "
+    rm -v $INSTALL_DIR/kp
+    echo "OK"
+fi
 
 # download kp
 echo -n "Downloading kp... "
