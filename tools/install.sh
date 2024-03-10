@@ -33,7 +33,7 @@ echo "OK"
 #remove kp if already exists
 if [ -f $INSTALL_DIR/kp ]; then
     echo -n "Removing previous version... "
-    rm -v $INSTALL_DIR/kp
+    rm $INSTALL_DIR/kp
     echo "OK"
 fi
 
