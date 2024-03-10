@@ -1,30 +1,43 @@
 #!/bin/bash
 
+amarelo='\033[0;33m'
+vermelho='\033[0;31m'
+verde='\033[0;32m'
+reset='\033[0m'
+
+echo "Checking and installing the necessary dependencies..."
+
 # Install python3-pip
-sudo apt-get install python3-pip
+echo -n "Python3-pip... "
+sudo apt-get install python3-pip >> /dev/null 2>&1
+echo "OK"
 
 # Install the termcolor package
-pip install termcolor
-
+echo -n "Termcolor... "
+pip install termcolor >> /dev/null 2>&1
+echo "OK"
 
 # Set the installation directory
 INSTALL_DIR=~/.local/bin
 
 # Check the installation directory
+echo -n "Checking the installation directory... "
 if [ ! -d $INSTALL_DIR ]; then
-    mkdir -p $INSTALL_DIR
+    echo -n "Nonexistent, creating... "
+    mkdir -p $(eval echo $INSTALL_DIR)
 fi
+echo "OK"
 
 # download kp
+echo -n "Downloading kp... "
 curl -fsSL https://raw.githubusercontent.com/Rodriggrr/kp/main/kp.py > $INSTALL_DIR/kp
+echo "OK"
 
 # CHMOD the file
 chmod +x $INSTALL_DIR/kp
 
 # Check for PATH
-amarelo='\033[0;33m'
-vermelho='\033[0;31m'
-reset='\033[0m'
+
 answer=""
 
 status=$(echo $PATH | grep -o '/.local/bin' | wc -l)
