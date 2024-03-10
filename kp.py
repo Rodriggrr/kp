@@ -33,8 +33,9 @@ import sys
 import time
 import argparse
 import subprocess
-import multiprocessing
+import threading
 from termcolor import colored
+import time
 
 # ------------------ VARIÁVEIS -------------------- #
 # tempo de compilação
@@ -49,11 +50,16 @@ versionInt = int(version.replace(".", ""))
 
 
 def check_new_version():
-    newVersion = subprocess.check_output("curl -SsL https://raw.githubusercontent.com/Rodriggrr/kp/main/version.txt", shell=True, text=True)
-    newVersionInt = int(newVersion.replace(".", ""))
+    try:
+        print("Checking for new version...")
+        newVersion = subprocess.check_output("timeout 0.2 curl -SsLp https://raw.githubusercontent.com/Rodriggrr/kp/main/version.txt", shell=True, text=True)
+        newVersionInt = int(newVersion.replace(".", ""))
 
-    if newVersionInt > versionInt:
-        update = True
+        if newVersionInt > versionInt:
+            global update
+            update = True
+    except subprocess.CalledProcessError:
+        return
 
 # função para mostrar tempo de compilação
 def show_compiling_time(file, foo=""):
@@ -230,8 +236,7 @@ args = parser.parse_args()
 
 
 # ----------------- MAIN ---------------------- #
-
-thread = multiprocessing.Process(target=check_new_version)
+thread = threading.Thread(target=check_new_version)
 thread.start()
 
 if args.version:
@@ -273,6 +278,8 @@ print("\nProgram closed in " + colored(f"[{endTime:.3f}]", "green") + " seconds.
 startTime = float(time.time() - time_to_compile)
 if args.execution_time:
     print("Total execution time: " + colored(f"[{(startTime):.5f}]", "blue") + " seconds.")
-thread.terminate()
+    
 if update:
     print(colored("kp tem uma nova atualização, use kp -u para atualizar.", "yellow"))
+    
+sys.exit(0)
