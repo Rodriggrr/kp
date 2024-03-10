@@ -43,7 +43,7 @@ update = False
 time_to_compile = time.time()
 total_time = time.time()
 error = False
-version = "0.1.7"
+version = "0.1.8"
 versionInt = int(version.replace(".", ""))
 
 # ------------------ FUNÇÕES VARIADAS ---------------------- #
