@@ -33,7 +33,7 @@ import sys
 import time
 import argparse
 import subprocess
-import threading
+import multiprocessing
 from termcolor import colored
 
 # ------------------ VARIÁVEIS -------------------- #
@@ -231,7 +231,7 @@ args = parser.parse_args()
 
 # ----------------- MAIN ---------------------- #
 
-thread = threading.Thread(target=check_new_version)
+thread = multiprocessing.Process(target=check_new_version)
 thread.start()
 
 if args.version:
@@ -273,6 +273,6 @@ print("\nProgram closed in " + colored(f"[{endTime:.3f}]", "green") + " seconds.
 startTime = float(time.time() - time_to_compile)
 if args.execution_time:
     print("Total execution time: " + colored(f"[{(startTime):.5f}]", "blue") + " seconds.")
-
+thread.terminate()
 if update:
     print(colored("kp tem uma nova atualização, use kp -u para atualizar.", "yellow"))
