@@ -8,7 +8,7 @@ pip install termcolor
 
 
 # Set the installation directory
-INSTALL_DIR="~/.local/bin"
+INSTALL_DIR=~/.local/bin
 
 # Check the installation directory
 if [ ! -d $INSTALL_DIR ]; then
