@@ -22,7 +22,3 @@ _OBS:_ install.sh will install python3-pip and termcolor, cause it is needed for
 
 
 ###### Program uses Python3, tested and used in Ubuntu 20.04 LTS
-
-## Windows
-
-Go to the folder containing the .exe and install instructions: [Windows](https://github.com/Rodriggrr/kp/tree/main/Windows)
