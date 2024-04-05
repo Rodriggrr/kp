@@ -11,7 +11,7 @@ echo "Checking and installing the necessary dependencies..."
 
 # Install python3-pip
 echo -n "Python3-pip... "
-sudo apt-get install python3-pip >> /dev/null 2>&1
+sudo apt-get install -y python3-pip >> /dev/null 2>&1
 echo "OK"
 
 # Install the termcolor package
