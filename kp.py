@@ -43,7 +43,7 @@ update = False
 time_to_compile = time.time()
 total_time = time.time()
 error = False
-version = "0.1.9"
+version = "0.2.0"
 versionInt = int(version.replace(".", ""))
 
 # ------------------ FUNÇÕES VARIADAS ---------------------- #
@@ -125,7 +125,7 @@ def compile_ts(args, show=True) -> int:
     else:
         hide = "> /dev/null 2>&1"
 
-    code = os.system(f"tsc \"{args}\" {hide}")
+    code = os.system(f"npx tsc \"{args}\" {hide}")
     return code
 
 
