@@ -9,14 +9,9 @@ sudo -v
 
 echo "Checking and installing the necessary dependencies..."
 
-# Install python3-pip
-echo -n "Python3-pip... "
-sudo apt-get install -y python3-pip >> /dev/null 2>&1
-echo "OK"
-
 # Install the termcolor package
 echo -n "Termcolor... "
-pip install termcolor >> /dev/null 2>&1
+sudo apt-get install python3-termcolor >> /dev/null 2>&1
 echo "OK"
 
 # Set the installation directory
@@ -62,7 +57,7 @@ if [ $status = "0" ]; then
 fi 
 
 # Check if the copy was successful
-if [ $? -eq 0 ]; then
+if [ -f $INSTALL_DIR/kp ]; then
     echo "Program $PROGRAM installed successfully in $INSTALL_DIR"
 else
     echo "An error occurred while installing the $PROGRAM program"
